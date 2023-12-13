@@ -33,15 +33,13 @@ mkdir base\%dir% & echo COMPLETE! & echo.
 
 @REM сбор данных
 echo Save devices stat to fille...
-C:\Windows\System32\wbem\wmic.exe computersystem get "Model","Manufacturer", "Name", "UserName" | find /v "" > base\%dir%\info.txt
-echo ============================================ >> base\%dir%\info.txt
-C:\Windows\System32\wbem\wmic.exe bios get serialnumber | find /v "" >> base\%dir%\info.txt
-echo ============================================ >> base\%dir%\info.txt
-C:\Windows\System32\wbem\wmic.exe nic where PhysicalAdapter=True get MACAddress,Name | find /v "" >> base\%dir%\info.txt
-echo ============================================ >> base\%dir%\info.txt
-C:\Windows\System32\wbem\wmic.exe NICCONFIG where IPEnabled=True get Caption,IPAddress,MACAddress | find /v "" >> base\%dir%\info.txt
-echo ============================================ >> base\%dir%\info.txt
-C:\Windows\System32\wbem\wmic.exe UserAccount where "Disabled=FALSE" get Caption,Name | find /v "" >> base\%dir%\info.txt
+wmic computersystem get "Manufacturer"/format:list > base\%dir%\info.txt
+wmic computersystem get "Model" /format:list >> base\%dir%\info.txt
+wmic computersystem get "Name"/format:list >> base\%dir%\info.txt
+wmic bios get serialnumber /format:list >> base\%dir%\info.txt
+wmic nic where PhysicalAdapter=True get MACAddress,Name >> base\%dir%\info.txt
+wmic NICCONFIG where IPEnabled=True get Caption,IPAddress,MACAddress >> base\%dir%\info.txt
+wmic UserAccount where "Disabled=FALSE" get Caption,Name >> base\%dir%\info.txt
 
 echo %respp% > base\%dir%\descr.txt
 C:\Windows\System32\wbem\wmic.exe bios get serialnumber > base\%dir%\serial.txt & echo COMPLETE! & echo.
