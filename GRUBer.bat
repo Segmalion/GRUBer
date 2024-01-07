@@ -1,10 +1,7 @@
-@REM  GRUBer - версия 0.9 от 07.11.2024
+@REM GRUBer - версия 0.9a от 07.11.2024
 @echo off
 @chcp 65001>nul
 setlocal EnableDelayedExpansion
-
-@rem если вдруг не работает wmic
-@REM SET PATH="C:\Windows\System32\wbem\;%PATH%"
 
 @REM переменые даты и времени
 for /f "tokens=2 delims==" %%a in ('C:\Windows\System32\wbem\wmic.exe OS Get localdatetime /value') do set "dt=%%a"
@@ -25,11 +22,9 @@ for /f "usebackq tokens=2 delims==" %%i in (`C:\Windows\System32\wbem\wmic.exe b
 set age=30
 set "dir=[%num%][date]viddil#serialnumber#kategoriya"
 set "dirF=[%num%][%ministamp%]%dep%#%serial%#%cat%"
-set dirF=%dirF: =% && set dir=%dir: =%
+set dirF=%dirF: =% && set dir=%dir: =% & @REM удаление пробелов в переменной dir
 set "dir=base\%dir%"
 set file
-
-@REM удаление пробелов в переменной dir
 
 @REM создание папки для данных
 echo Create new dir "%dir%"...
