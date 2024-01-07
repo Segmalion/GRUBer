@@ -1,6 +1,7 @@
-@REM  GRUBer - версия 0.8 от 22.12.2023
+@REM  GRUBer - версия 0.9 от 07.11.2024
 @echo off
 @chcp 65001>nul
+setlocal EnableDelayedExpansion
 
 @rem если вдруг не работает wmic
 @REM SET PATH="C:\Windows\System32\wbem\;%PATH%"
@@ -13,10 +14,10 @@ set "datestamp=%YYYY%%MM%%DD%" & set "timestamp=%HH%%Min%%Sec%" & set "ministamp
 set "fullstamp=%YYYY%-%MM%-%DD%_%HH%-%Min%-%Sec%"
 
 @REM ручной ввод данных
-set /p "num=Num PC: " & if not defined num (set num = "--")
-set /p "dep=Viddil: " & if not defined dep (set dep = "---")
-set /p "cat=Kategr: " & if not defined cat (set cat = "БезК")
-set /p "res=Vidpov: " & if not defined respp (set respp = "Черговий")
+set /p "num=Num PC: " & if "%num%" == "" set num=00
+set /p "dep=Viddil: " & if "%dep%" == "" set dep=---
+set /p "cat=Kategr: " & if "%cat%" == "" set cat=БезК
+set /p "res=Vidpov: " & if "%res%" == "" set res=Черговий
 echo ============================================ & echo.
 
 for /f "usebackq tokens=2 delims==" %%i in (`C:\Windows\System32\wbem\wmic.exe bios get serialnumber /value`) do set serial=%%i
@@ -48,7 +49,7 @@ C:\Windows\System32\wbem\wmic.exe NICCONFIG where IPEnabled=True get Caption,IPA
 C:\Windows\System32\wbem\wmic.exe UserAccount where "Disabled=FALSE" get Caption,Name >> %file%
 
 set file=%dir%\descr.txt
-echo %respp% > %file%
+echo %res% > %file%
 
 set file=%dir%\serial.txt
 C:\Windows\System32\wbem\wmic.exe bios get serialnumber > %file% & echo COMPLETE! & echo.
@@ -63,7 +64,7 @@ tool\NetworkInterfacesView_x32.exe /stext %dir%\net1.txt
 set file=%dir%\net2.txt
 tool\WifiHistoryView.exe /stext %dir%\net2.txt & echo COMPLETE! & echo.
 
-choice /c YN /t 5 /d N /m "Run ESET LogCollector and PCsysStat?"
+choice /c 10 /t 10 /d 0 /m "Run ESET LogCollector and PCsysStat? (1-Yes, 0-No)"
 if %errorlevel%==1 (
    set file=%dir%\eset-log.zip
    echo ESET LogCollector run...
