@@ -50,8 +50,6 @@ goto :exit
    C:\Windows\System32\wbem\wmic.exe nic where PhysicalAdapter=True get MACAddress,Name >> %fDir%
    C:\Windows\System32\wbem\wmic.exe NICCONFIG where IPEnabled=True get Caption,IPAddress,MACAddress >> %fDir%
    C:\Windows\System32\wbem\wmic.exe UserAccount where "Disabled=FALSE" get Caption,Name >> %fDir%
-   rem set =%fDir%
-   rem tool\iconv.exe -f UTF-16 -t UTF-8 %fDir% >> %fDir%
    call :COMPLETE
    goto :EOF
 
@@ -97,12 +95,10 @@ goto :exit
    if %errorlevel%==1 (
       call :setFile eset-log.zip
       echo Seve ESET LogCollector to fille %Esc%[93m!file!%Esc%[0m...
-      rem echo !file!
       start /wait cmd.exe /c "start /wait tool\ESETLogCollector.exe /accepteula /Lang:UKR /Age:%age% /NoTargets:Fw %WD%%fDir%"
       call :COMPLETE
       call :setFile audit.html
       echo Save WinAudit output to fille %Esc%[93m!file!%Esc%[0m...
-      rem echo !file!
       tool\WinAudit.exe /r=gsoPxuTUeERNtnzDaIbMpmidcSArHG /f=%WD%%fDir% /L=en
       call :COMPLETE
    )
@@ -117,7 +113,6 @@ goto :exit
 :setFile
    set file=%1
    set fDir=%dir%\%file%
-   @REM echo %fDir%
    goto :EOF
 
 :variableSystem
